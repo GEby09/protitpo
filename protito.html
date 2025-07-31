@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduComunitaria GT</title>
+    <style>
+        /* Variables de colores */
+        :root {
+            --maya-purple: #6A0DAD;
+            --jade-green: #00A86B;
+            --adobe-red: #C41E3A;
+            --maize-yellow: #FBCB0A;
+            --earth-brown: #8B4513;
+            --cloud-white: #F5F5F5;
+            --night-black: #1A1A1A;
+            --dark-bg: #121212;
+            --light-text: #E0E0E0;
+        }
+
+        /* Reset y base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans', Arial, sans-serif;
+            background: var(--cloud-white);
+            color: var(--night-black);
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Contenedor principal */
+        .app-container {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Pantallas */
+        .screen {
+            display: none;
+            flex-direction: column;
+            height: 100vh;
+            padding: 20px;
+            position: relative;
+        }
+
+        .screen.active {
+            display: flex;
+        }
+
+        /* Pantalla de Bienvenida */
+        #welcome-screen {
+            text-align: center;
+            justify-content: space-between;
+            background: linear-gradient(135deg, var(--maya-purple), var(--jade-green));
+            color: white;
+        }
+
+        .welcome-header {
+            margin-top: 40px;
+        }
+
+        .logo {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 20px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            font-weight: bold;
+            color: var(--maya-purple);
+            margin: 0 auto 20px;
+        }
+
+        .welcome-header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .welcome-header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .language-selector {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .language-selector h2 {
+            font-size: 20px;
+            margin-bottom: 30px;
+        }
+
+        .language-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+
+        .lang-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .lang-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .primary-btn {
+            background: white;
+            color: var(--maya-purple);
+            border: none;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .secondary-btn {
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        /* Selección de Perfil */
+        #profile-screen {
+            background: var(--cloud-white);
+            color: var(--night-black);
+            text-align: center;
+        }
+
+        #profile-screen h1 {
+            font-size: 24px;
+            margin-bottom: 30px;
+            color: var(--maya-purple);
+        }
+
+        .profile-cards {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            flex: 1;
+            align-content: center;
+        }
+
+        .profile-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .profile-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--maya-purple);
+        }
+
+        .profile-card .icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 15px;
+            background: var(--maya-purple);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: white;
+        }
+
+        .profile-card h3 {
+            font-size: 20px;
+            margin-bottom: 8px;
+            color: var(--maya-purple);
+        }
+
+        .profile-card p {
+            font-size: 16px;
+            color: var(--earth-brown);
+        }
+
+        /* Dashboard */
+        #dashboard {
+            background: var(--cloud-white);
+        }
+
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            margin-bottom: 20px;
+        }
+
+        .main-header h1 {
+            font-size: 24px;
+            color: var(--maya-purple);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--night-black);
+        }
+
+        /* Navegación inferior */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            z-index: 1000;
+        }
+
+        .nav-item {
+            background: none;
+            border: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+            cursor: pointer;
+            color: var(--earth-brown);
+            padding: 8px 16px;
+            border-radius: 12px;
+        }
+
+        .nav-item.active {
+            background: var(--maya-purple);
+            color: white;
+        }
+
+        .nav-item span:first-child {
+            font-size: 20px;
+        }
+
+        /* Botones */
+        .primary-btn, .secondary-btn {
+            font-family: 'Noto Sans', Arial, sans-serif;
+        }
+
+        /* Responsive */
+        @media (min-width: 768px) {
+            .language-buttons {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .profile-cards {
+                grid-template-columns: repeat(3, 1fr);
+                max-width: 800px;
+                margin: 0 auto;
+            }
+            
+            .bottom-nav {
+                max-width: 500px;
+                left: 50%;
+                transform: translateX(-50%);
+                border-radius: 20px;
+                bottom: 20px;
+            }
+        }
+
+        /* Modo oscuro */
+        .dark-mode {
+            background: var(--dark-bg);
+            color: var(--light-text);
+        }
+
+        .dark-mode .profile-card {
+            background: #2d2d2d;
+            color: var(--light-text);
+        }
+
+        .dark-mode .profile-card h3 {
+            color: var(--maize-yellow);
+        }
+
+        .dark-mode .main-header h1 {
+            color: var(--maize-yellow);
+        }
+
+        /* Secciones del dashboard */
+        .dashboard-content {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 80px;
+            padding-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            color: var(--maya-purple);
+            margin-bottom: 20px;
+        }
+
+        .courses-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .course-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            cursor: pointer;
+        }
+
+        .course-card h3 {
+            color: var(--maya-purple);
+            margin-bottom: 8px;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--jade-green);
+            border-radius: 4px;
+        }
+
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .achievement-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .achievement-icon {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        .achievement-card.locked {
+            opacity: 0.5;
+        }
+
+        /* Botón de cambio de idioma en dashboard */
+        .language-change-btn {
+            background: var(--maya-purple);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        /* Pantallas específicas */
+        #courses-screen, #games-screen, #library-screen, #achievements-screen {
+            background: var(--cloud-white);
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: var(--maya-purple);
+            font-size: 16px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Cursos pantalla */
+        .course-detail {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 15px;
+        }
+
+        .module-list {
+            margin-top: 20px;
+        }
+
+        .module-item {
+            background: #f8f8f8;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .module-item.completed {
+            background: #e8f5e8;
+        }
+
+        .module-item.locked {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Juegos pantalla */
+        .games-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .game-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            cursor: pointer;
+        }
+
+        .game-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        /* Biblioteca pantalla */
+        .library-categories {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+        }
+
+        .category-btn {
+            background: #e0e0e0;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .category-btn.active {
+            background: var(--maya-purple);
+            color: white;
+        }
+
+        .library-items {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .library-item {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .library-icon {
+            font-size: 24px;
+            color: var(--maya-purple);
+        }
+
+        /* Logros pantalla */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--maya-purple);
+        }
+
+        .achievements-list {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .achievement-item {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .achievement-item.locked {
+            opacity: 0.6;
+        }
+
+        /* Pantalla de perfil */
+        #profile-detail-screen {
+            background: var(--cloud-white);
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            background: var(--maya-purple);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: white;
+            margin: 0 auto 15px;
+        }
+
+        .profile-info {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Pantalla de Bienvenida -->
+        <div id="welcome-screen" class="screen active">
+            <div class="welcome-header">
+                <div class="logo">📚</div>
+                <h1 data-key="app_name">EduComunitaria GT</h1>
+                <p data-key="app_description">Plataforma de educación local híbrida</p>
+            </div>
+            
+            <div class="language-selector">
+                <h2 data-key="select_language">Selecciona tu idioma</h2>
+                <div class="language-buttons">
+                    <button class="lang-btn" data-lang="es">Español</button>
+                    <button class="lang-btn" data-lang="quc">K'iche'</button>
+                    <button class="lang-btn" data-lang="kek">Q'eqchi'</button>
+                    <button class="lang-btn" data-lang="mam">Mam</button>
+                    <button class="lang-btn" data-lang="cak">Kaqchikel</button>
+                </div>
+            </div>
+            
+            <button class="primary-btn" id="enter-btn" data-key="enter">Ingresar</button>
+            
+            <div class="first-time">
+                <button class="secondary-btn" data-key="first_time">¿Primera vez aquí?</button>
+            </div>
+        </div>
+        
+        <!-- Pantalla de Selección de Perfil -->
+        <div id="profile-screen" class="screen">
+            <h1 data-key="select_profile">Selecciona tu perfil</h1>
+            <div class="profile-cards">
+                <div class="profile-card" data-profile="student">
+                    <div class="icon">🎓</div>
+                    <h3 data-key="student">Estudiante</h3>
+                    <p data-key="student_desc">Aprende y crece</p>
+                </div>
+                <div class="profile-card" data-profile="teacher">
+                    <div class="icon">👨‍🏫</div>
+                    <h3 data-key="teacher">Educador</h3>
+                    <p data-key="teacher_desc">Enseña y guía</p>
+                </div>
+                <div class="profile-card" data-profile="parent">
+                    <div class="icon">👨‍👩‍👧</div>
+                    <h3 data-key="parent">Padre/Tutor</h3>
+                    <p data-key="parent_desc">Apoya el aprendizaje</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Dashboard Principal -->
+        <div id="dashboard" class="screen">
+            <header class="main-header">
+                <h1 data-key="welcome">Bienvenido</h1>
+                <div class="header-actions">
+                    <button class="icon-btn">🔔</button>
+                    <button class="icon-btn" onclick="showScreen('profile-detail-screen')">👤</button>
+                </div>
+            </header>
+            
+            <div class="dashboard-content">
+                <!-- Sección de Cursos -->
+                <div class="section">
+                    <h2 class="section-title" data-key="recommended_courses">Cursos Recomendados</h2>
+                    <div class="courses-grid">
+                        <div class="course-card" onclick="showCourseDetail('math')">
+                            <h3 data-key="math_course">Matemáticas Básicas</h3>
+                            <p data-key="level_primary">Nivel: Primaria</p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 60%"></div>
+                            </div>
+                            <p>60% <span data-key="completed">completado</span></p>
+                        </div>
+                        <div class="course-card" onclick="showCourseDetail('language')">
+                            <h3 data-key="language_course">Lengua Maya</h3>
+                            <p data-key="level_intermediate">Nivel: Intermedio</p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 30%"></div>
+                            </div>
+                            <p>30% <span data-key="completed">completado</span></p>
+                        </div>
+                        <div class="course-card" onclick="showCourseDetail('science')">
+                            <h3 data-key="science_course">Ciencias Naturales</h3>
+                            <p data-key="level_secondary">Nivel: Secundaria</p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 10%"></div>
+                            </div>
+                            <p>10% <span data-key="completed">completado</span></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Sección de Logros -->
+                <div class="section" style="margin-top: 30px;">
+                    <h2 class="section-title" data-key="my_achievements">Mis Logros</h2>
+                    <div class="achievements-grid">
+                        <div class="achievement-card">
+                            <div class="achievement-icon">🏆</div>
+                            <h4 data-key="first_step">Primer Paso</h4>
+                            <p data-key="unlocked">Completado</p>
+                        </div>
+                        <div class="achievement-card locked">
+                            <div class="achievement-icon">🥇</div>
+                            <h4 data-key="excellent">Excelente</h4>
+                            <p data-key="locked">Bloqueado</p>
+                        </div>
+                        <div class="achievement-card locked">
+                            <div class="achievement-icon">📚</div>
+                            <h4 data-key="reader">Lector</h4>
+                            <p data-key="locked">Bloqueado</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Botón para cambiar idioma -->
+                <button class="language-change-btn" id="change-language-btn" data-key="change_language">Cambiar Idioma</button>
+            </div>
+            
+            <nav class="bottom-nav">
+                <button class="nav-item active" data-page="home" onclick="showScreen('dashboard')">
+                    <span>🏠</span>
+                    <span data-key="home">Inicio</span>
+                </button>
+                <button class="nav-item" data-page="courses" onclick="showScreen('courses-screen')">
+                    <span>📚</span>
+                    <span data-key="courses">Cursos</span>
+                </button>
+                <button class="nav-item" data-page="games" onclick="showScreen('games-screen')">
+                    <span>🎮</span>
+                    <span data-key="games">Juegos</span>
+                </button>
+                <button class="nav-item" data-page="library" onclick="showScreen('library-screen')">
+                    <span>📖</span>
+                    <span data-key="library">Biblioteca</span>
+                </button>
+                <button class="nav-item" data-page="achievements" onclick="showScreen('achievements-screen')">
+                    <span>🏆</span>
+                    <span data-key="achievements">Logros</span>
+                </button>
+            </nav>
+        </div>
+        
+        <!-- Pantalla de Cursos -->
+        <div id="courses-screen" class="screen">
+            <button class="back-btn" onclick="showScreen('dashboard')">← <span data-key="back">Volver</span></button>
+            <h1 data-key="all_courses">Todos los Cursos</h1>
+            
+            <div class="courses-grid">
+                <div class="course-card" onclick="showCourseDetail('math')">
+                    <h3 data-key="math_course">Matemáticas Básicas</h3>
+                    <p data-key="level_primary">Nivel: Primaria</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 60%"></div>
+                    </div>
+                    <p>60% <span data-key="completed">completado</span></p>
+                </div>
+                <div class="course-card" onclick="showCourseDetail('language')">
+                    <h3 data-key="language_course">Lengua Maya</h3>
+                    <p data-key="level_intermediate">Nivel: Intermedio</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 30%"></div>
+                    </div>
+                    <p>30% <span data-key="completed">completado</span></p>
+                </div>
+                <div class="course-card" onclick="showCourseDetail('science')">
+                    <h3 data-key="science_course">Ciencias Naturales</h3>
+                    <p data-key="level_secondary">Nivel: Secundaria</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 10%"></div>
+                    </div>
+                    <p>10% <span data-key="completed">completado</span></p>
+                </div>
+                <div class="course-card">
+                    <h3 data-key="history_course">Historia de Guatemala</h3>
+                    <p data-key="level_primary">Nivel: Primaria</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 0%"></div>
+                    </div>
+                    <p>0% <span data-key="completed">completado</span></p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Detalle de Curso -->
+        <div id="course-detail-screen" class="screen">
+            <button class="back-btn" onclick="showScreen('courses-screen')">← <span data-key="back">Volver</span></button>
+            <div class="course-detail">
+                <h2 id="course-title">Matemáticas Básicas</h2>
+                <p data-key="level_primary">Nivel: Primaria</p>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 60%"></div>
+                </div>
+                <p>60% <span data-key="completed">completado</span></p>
+                
+                <div class="module-list">
+                    <h3 data-key="modules">Módulos</h3>
+                    <div class="module-item completed">
+                        <span data-key="module1">Módulo 1: Números del 1 al 10</span>
+                        <span>✓</span>
+                    </div>
+                    <div class="module-item completed">
+                        <span data-key="module2">Módulo 2: Sumas básicas</span>
+                        <span>✓</span>
+                    </div>
+                    <div class="module-item">
+                        <span data-key="module3">Módulo 3: Restas básicas</span>
+                    </div>
+                    <div class="module-item locked">
+                        <span data-key="module4">Módulo 4: Multiplicación</span>
+                        <span>🔒</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Pantalla de Juegos -->
+        <div id="games-screen" class="screen">
+            <button class="back-btn" onclick="showScreen('dashboard')">← <span data-key="back">Volver</span></button>
+            <h1 data-key="educational_games">Juegos Educativos</h1>
+            
+            <div class="games-grid">
+                <div class="game-card">
+                    <div class="game-icon">🔢</div>
+                    <h3 data-key="math_game">Matemáticas</h3>
+                    <p data-key="fun_learning">Aprende jugando</p>
+                </div>
+                <div class="game-card">
+                    <div class="game-icon">🔤</div>
+                    <h3 data-key="language_game">Lenguaje</h3>
+                    <p data-key="fun_learning">Aprende jugando</p>
+                </div>
+                <div class="game-card">
+                    <div class="game-icon">🌍</div>
+                    <h3 data-key="geography_game">Geografía</h3>
+                    <p data-key="fun_learning">Aprende jugando</p>
+                </div>
+                <div class="game-card">
+                    <div class="game-icon">🎨</div>
+                    <h3 data-key="art_game">Arte Maya</h3>
+                    <p data-key="fun_learning">Aprende jugando</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Pantalla de Biblioteca -->
+        <div id="library-screen" class="screen">
+            <button class="back-btn" onclick="showScreen('dashboard')">← <span data-key="back">Volver</span></button>
+            <h1 data-key="digital_library">Biblioteca Digital</h1>
+            
+            <div class="library-categories">
+                <button class="category-btn active" data-key="all">Todos</button>
+                <button class="category-btn" data-key="books">Libros</button>
+                <button class="category-btn" data-key="stories">Cuentos</button>
+                <button class="category-btn" data-key="dictionary">Diccionario</button>
+                <button class="category-btn" data-key="manuals">Manuales</button>
+            </div>
+            
+            <div class="library-items">
+                <div class="library-item">
+                    <div class="library-icon">📚</div>
+                    <div>
+                        <h3 data-key="math_book">Libro de Matemáticas</h3>
+                        <p data-key="pdf_format">Formato PDF - 2.5 MB</p>
+                    </div>
+                </div>
+                <div class="library-item">
+                    <div class="library-icon">📖</div>
+                    <div>
+                        <h3 data-key="creation_story">Cuento de la Creación</h3>
+                        <p data-key="audio_format">Formato Audio - 15 min</p>
+                    </div>
+                </div>
+                <div class="library-item">
+                    <div class="library-icon">📔</div>
+                    <div>
+                        <h3 data-key="dictionary">Diccionario Maya-Español</h3>
+                        <p data-key="pdf_format">Formato PDF - 5.2 MB</p>
+                    </div>
+                </div>
+                <div class="library-item">
+                    <div class="library-icon">📘</div>
+                    <div>
+                        <h3 data-key="agriculture_manual">Manual de Agricultura</h3>
+                        <p data-key="pdf_format">Formato PDF - 3.1 MB</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Pantalla de Logros -->
+        <div id="achievements-screen" class="screen">
+            <button class="back-btn" onclick="showScreen('dashboard')">← <span data-key="back">Volver</span></button>
+            <h1 data-key="my_achievements">Mis Logros</h1>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">60%</div>
+                    <div data-key="progress">Progreso</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">3</div>
+                    <div data-key="completed_courses">Cursos completados</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">1</div>
+                    <div data-key="badges">Insignias</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">15</div>
+                    <div data-key="days_active">Días activo</div>
+                </div>
+            </div>
+            
+            <div class="achievements-list">
+                <div class="achievement-item">
+                    <div class="achievement-icon">🏆</div>
+                    <div>
+                        <h3 data-key="first_step">Primer Paso</h3>
+                        <p data-key="first_course">Completar tu primer curso</p>
+                    </div>
+                </div>
+                <div class="achievement-item locked">
+                    <div class="achievement-icon">🥇</div>
+                    <div>
+                        <h3 data-key="excellent">Excelente</h3>
+                        <p data-key="perfect_score">Obtener 100% en un curso</p>
+                    </div>
+                </div>
+                <div class="achievement-item locked">
+                    <div class="achievement-icon">📚</div>
+                    <div>
+                        <h3 data-key="reader">Lector</h3>
+                        <p data-key="read_5_books">Leer 5 libros</p>
+                    </div>
+                </div>
+                <div class="achievement-item">
+                    <div class="achievement-icon">⭐</div>
+                    <div>
+                        <h3 data-key="consistent">Consistente</h3>
+                        <p data-key="7_days">Estudiar 7 días seguidos</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Pantalla de Detalle de Perfil -->
+        <div id="profile-detail-screen" class="screen">
+            <button class="back-btn" onclick="showScreen('dashboard')">← <span data-key="back">Volver</span></button>
+            
+            <div class="profile-header">
+                <div class="profile-avatar">🎓</div>
+                <h2 data-key="student">Estudiante</h2>
+                <p>Maria López</p>
+            </div>
+            
+            <div class="profile-info">
+                <div class="info-item">
+                    <span data-key="progress">Progreso</span>
+                    <span>60%</span>
+                </div>
+                <div class="info-item">
+                    <span data-key="courses_completed">Cursos completados</span>
+                    <span>3</span>
+                </div>
+                <div class="info-item">
+                    <span data-key="badges">Insignias</span>
+                    <span>1</span>
+                </div>
+                <div class="info-item">
+                    <span data-key="last_active">Última actividad</span>
+                    <span data-key="today">Hoy</span>
+                </div>
+            </div>
+            
+            <button class="primary-btn" style="width: 100%;" onclick="showScreen('welcome-screen')">
+                <span data-key="change_language">Cambiar Idioma</span>
+            </button>
+        </div>
+    </div>
+    
+    <script>
+        // Sistema de traducciones
+        const translations = {
+            es: {
+                app_name: "EduComunitaria GT",
+                app_description: "Plataforma de educación local híbrida",
+                select_language: "Selecciona tu idioma",
+                enter: "Ingresar",
+                first_time: "¿Primera vez aquí?",
+                select_profile: "Selecciona tu perfil",
+                student: "Estudiante",
+                student_desc: "Aprende y crece",
+                teacher: "Educador",
+                teacher_desc: "Enseña y guía",
+                parent: "Padre/Tutor",
+                parent_desc: "Apoya el aprendizaje",
+                welcome: "Bienvenido",
+                recommended_courses: "Cursos Recomendados",
+                math_course: "Matemáticas Básicas",
+                language_course: "Lengua Maya",
+                science_course: "Ciencias Naturales",
+                history_course: "Historia de Guatemala",
+                level_primary: "Nivel: Primaria",
+                level_intermediate: "Nivel: Intermedio",
+                level_secondary: "Nivel: Secundaria",
+                completed: "completado",
+                my_achievements: "Mis Logros",
+                first_step: "Primer Paso",
+                excellent: "Excelente",
+                reader: "Lector",
+                unlocked: "Completado",
+                locked: "Bloqueado",
+                home: "Inicio",
+                courses: "Cursos",
+                games: "Juegos",
+                library: "Biblioteca",
+                achievements: "Logros",
+                change_language: "Cambiar Idioma",
+                back: "Volver",
+                all_courses: "Todos los Cursos",
+                modules: "Módulos",
+                module1: "Módulo 1: Números del 1 al 10",
+                module2: "Módulo 2: Sumas básicas",
+                module3: "Módulo 3: Restas básicas",
+                module4: "Módulo 4: Multiplicación",
+                educational_games: "Juegos Educativos",
+                math_game: "Matemáticas",
+                language_game: "Lenguaje",
+                geography_game: "Geografía",
+                art_game: "Arte Maya",
+                fun_learning: "Aprende jugando",
+                digital_library: "Biblioteca Digital",
+                all: "Todos",
+                books: "Libros",
+                stories: "Cuentos",
+                dictionary: "Diccionario",
+                manuals: "Manuales",
+                math_book: "Libro de Matemáticas",
+                creation_story: "Cuento de la Creación",
+                agriculture_manual: "Manual de Agricultura",
+                pdf_format: "Formato PDF - 2.5 MB",
+                audio_format: "Formato Audio - 15 min",
+                progress: "Progreso",
+                completed_courses: "Cursos completados",
+                badges: "Insignias",
+                days_active: "Días activo",
+                first_course: "Completar tu primer curso",
+                perfect_score: "Obtener 100% en un curso",
+                read_5_books: "Leer 5 libros",
+                consistent: "Consistente",
+                "7_days": "Estudiar 7 días seguidos",
+                today: "Hoy",
+                courses_completed: "Cursos completados",
+                last_active: "Última actividad"
+            },
+            quc: {
+                app_name: "EduComunitaria GT",
+                app_description: "Run taq tzij pa k'amal rech'",
+                select_language: "Tachaqa' ruwäch",
+                enter: "Okisäx",
+                first_time: "¿Nimäx ütz chik?",
+                select_profile: "Tachaqa' ruwinaqil",
+                student: "Tzijonel",
+                student_desc: "Tzija' chuqa' nimäx",
+                teacher: "Ajtzij",
+                teacher_desc: "Tzija' chuqa' ch'awon",
+                parent: "Mam/Tat",
+                parent_desc: "To'on tzij richin nimäx",
+                welcome: "Ütz awäch",
+                recommended_courses: "Kichinam tzijob'äl",
+                math_course: "Juna' richin tzij",
+                language_course: "Ch'ab'äl Maya",
+                science_course: "K'axk'ol tzij",
+                history_course: "Nima'q tzijob'äl",
+                level_primary: "Ruwäch: Tikib'äl",
+                level_intermediate: "Ruwäch: Kik'ojol",
+                level_secondary: "Ruwäch: Kanoq'",
+                completed: "tz'aqät",
+                my_achievements: "Taq winaqil",
+                first_step: "Nim Ro'x",
+                excellent: "K'ayew",
+                reader: "Silonel",
+                unlocked: "Tz'aqät",
+                locked: "Chupül",
+                home: "Tikirib'äl",
+                courses: "Tzijob'äl",
+                games: "Ch'oj",
+                library: "Wujb'äl",
+                achievements: "Utzb'äl",
+                change_language: "Tiq'ax ruwäch",
+                back: "Tzolin",
+                all_courses: "Konojel taq tzijob'äl",
+                modules: "Taq wuj",
+                module1: "Wuj 1: Ajilan 1 chi 10",
+                module2: "Wuj 2: Chojk'isaxik",
+                module3: "Wuj 3: Elesaxik",
+                module4: "Wuj 4: Tz'ukunaxik",
+                educational_games: "Ch'oj richin tzij",
+                math_game: "Juna'",
+                language_game: "Ch'ab'äl",
+                geography_game: "Ch'ab'äl winaq",
+                art_game: "Silonib'äl Maya",
+                fun_learning: "Tzija' pa ch'oj",
+                digital_library: "Wujb'äl pa k'amal",
+                all: "Konojel",
+                books: "Taq wuj",
+                stories: "Taq nima'q tzij",
+                dictionary: "Tz'ib'äl",
+                manuals: "Taq cholna'oj",
+                math_book: "Wuj richin juna'",
+                creation_story: "Nima'q tzij richin tz'ukun",
+                agriculture_manual: "Cholna'oj richin tz'ukun",
+                pdf_format: "Ruwäch PDF - 2.5 MB",
+                audio_format: "Ruwäch k'oxom - 15 ch'ut",
+                progress: "Tz'aqät",
+                completed_courses: "Taq tzijob'äl tz'aqät",
+                badges: "Taq utzb'äl",
+                days_active: "Taq q'ij okisan",
+                first_course: "Tz'aqät nim ro'x tzijob'äl",
+                perfect_score: "Tz'aqät 100% pa jun tzijob'äl",
+                read_5_books: "Silon 5 taq wuj",
+                consistent: "K'amonel",
+                "7_days": "Tzija' 7 taq q'ij chi rij",
+                today: "Wakami",
+                courses_completed: "Taq tzijob'äl tz'aqät",
+                last_active: "Ruk'isib'äl okisaxik"
+            }
+        };
+
+        // Variables globales
+        let currentLanguage = 'es';
+        let currentProfile = 'student';
+        let currentCourse = '';
+
+        // Función para aplicar traducciones
+        function applyTranslations() {
+            const currentTranslations = translations[currentLanguage];
+            
+            // Aplicar traducciones a elementos con data-key
+            document.querySelectorAll('[data-key]').forEach(element => {
+                const key = element.dataset.key;
+                if (currentTranslations[key]) {
+                    if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                        element.placeholder = currentTranslations[key];
+                    } else {
+                        element.textContent = currentTranslations[key];
+                    }
+                }
+            });
+        }
+
+        // Función para cambiar idioma
+        function changeLanguage(langCode) {
+            if (translations[langCode]) {
+                currentLanguage = langCode;
+                localStorage.setItem('edugt_language', langCode);
+                applyTranslations();
+            }
+        }
+
+        // Navegación entre pantallas
+        function showScreen(screenId) {
+            // Ocultar todas las pantallas
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            
+            // Mostrar la pantalla seleccionada
+            const screen = document.getElementById(screenId);
+            if (screen) {
+                screen.classList.add('active');
+            }
+        }
+
+        // Mostrar detalle de curso
+        function showCourseDetail(courseId) {
+            currentCourse = courseId;
+            const courseTitles = {
+                'math': 'Matemáticas Básicas',
+                'language': 'Lengua Maya',
+                'science': 'Ciencias Naturales'
+            };
+            
+            document.getElementById('course-title').textContent = courseTitles[courseId] || 'Curso';
+            showScreen('course-detail-screen');
+        }
+
+        // Inicializar cuando el DOM esté listo
+        document.addEventListener('DOMContentLoaded', function() {
+            // Cargar idioma guardado
+            const savedLang = localStorage.getItem('edugt_language');
+            if (savedLang && translations[savedLang]) {
+                currentLanguage = savedLang;
+                applyTranslations();
+            }
+
+            // Event listeners para botones de idioma
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const langCode = this.dataset.lang;
+                    changeLanguage(langCode);
+                    showScreen('profile-screen');
+                });
+            });
+
+            // Botón de ingresar
+            const enterBtn = document.getElementById('enter-btn');
+            if (enterBtn) {
+                enterBtn.addEventListener('click', function() {
+                    showScreen('profile-screen');
+                });
+            }
+            
+            // Tarjetas de perfil
+            document.querySelectorAll('.profile-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    currentProfile = this.dataset.profile;
+                    showScreen('dashboard');
+                });
+            });
+
+            // Botón de cambio de idioma en dashboard
+            const changeLangBtn = document.getElementById('change-language-btn');
+            if (changeLangBtn) {
+                changeLangBtn.addEventListener('click', function() {
+                    showScreen('welcome-screen');
+                });
+            }
+
+            // Categorías de biblioteca
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.category-btn').forEach(b => {
+                        b.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
